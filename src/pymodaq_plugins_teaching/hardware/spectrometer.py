@@ -61,13 +61,16 @@ class Spectrometer:
             self._wh = value
 
     def set_wavelength(self, value, set_type='abs'):
-        if value < 0:
-            raise ValueError('Wavelength cannot be negative')
-
         if set_type == 'abs':
-            self.current_positions['lambda0'] = value
+            if value < 0:
+                raise ValueError('Wavelength cannot be negative')
+            else:
+                self.current_positions['lambda0'] = value
         else:
-            self.current_positions['lambda0'] += value
+            if value < (current_positions['lambda0'] + value):
+                raise ValueError('Wavelength cannot be negative')
+            else:
+                self.current_positions['lambda0'] += value
 
     def get_wavelength(self):
         return self.current_positions['lambda0']
